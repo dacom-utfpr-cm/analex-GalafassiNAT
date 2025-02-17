@@ -36,5 +36,7 @@ def test_execute(input_file, args):
     print("Expected output:")
     print(expected_output)
 
-    assert stdout.decode("utf-8").strip() == expected_output.strip()
-
+    # assert stdout.decode("utf-8").strip() == expected_output.strip()
+    generated = stdout.decode("utf-8").replace("\r\n", "\n").strip()
+    expected = expected_output.replace("\r\n", "\n").strip()
+    assert generated == expected
