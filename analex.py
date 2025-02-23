@@ -1,7 +1,7 @@
 from automata.fa.Mealy import Mealy
 import sys, os, string, re
-
 from myerror import MyError
+from utils.tokens import reserved_words, operators, separators
 
 error_handler = MyError('LexerErrors')
 
@@ -24,42 +24,6 @@ Mealy.get_output_from_string = my_get_output_from_string
 
 # Variáveis globais
 DEBUG = False
-
-# Tokens
-reserved_words = [
-    'INT',
-    'VOID',
-    'FLOAT',
-    'RETURN',
-    'IF',
-    'ELSE',
-    'WHILE',
-]
-
-operators = {
-    '+': 'PLUS',
-    '-': 'MINUS',
-    '*': 'TIMES',
-    '/': 'DIVIDE',
-    '<': 'LESS',
-    '<=': 'LESS_EQUAL',
-    '>': 'GREATER',
-    '>=': 'GREATER_EQUAL',
-    '==': 'EQUALS',
-    '!': 'DIFFERENT',
-    '=': 'ATTRIBUTION',
-}
-
-separators = {
-    '(': 'LPAREN',
-    ')': 'RPAREN',
-    '[': 'LBRACKETS',
-    ']': 'RBRACKETS',
-    '{': 'LBRACES',
-    '}': 'RBRACES',
-    ';': 'SEMICOLON',
-    ',': 'COMMA',
-}
 
 
 digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -134,7 +98,7 @@ for sep in separators.keys():
     separators_states_transitions[sep] = state_transitions
 
 # Criando lista de estados da máquina
-states_list = ['q0', 'q_reserved', 'q2', 'q3', 'q4', 'q_digit', 'q_id', 'q_if', 'q_xl']
+states_list = ['q0', 'q_reserved', 'q_digit', 'q_id', 'q_if', 'q_xl']
 states_list += list(operators.keys())
 states_list += list(separators.keys())
 states_list += int_states
@@ -409,10 +373,12 @@ def main():
     global check_cm
     global check_key
     global check_file
+    global check_cvm
 
     check_cm = False
     check_key = False
     check_file = False
+    check_cvm = False
 
     idx_cm = 0
 
@@ -462,6 +428,12 @@ def main():
             print("Estados definidos:", states_list)
             print("Alfabeto de entrada:", input_alph)
             print("Alfabeto de saída:", output_alph)
+            with open ("transitions.txt", "w") as f:
+                for state in mealy.states:
+                    f.write(f"Estado: {state}\n")
+                    for input_symbol, transition in mealy.transitions[state].items():
+                        f.write(f"Transição: {input_symbol} -> {transition}\n")
+                    f.write("\n")
 
 
 
