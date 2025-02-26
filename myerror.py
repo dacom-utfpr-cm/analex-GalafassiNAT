@@ -13,14 +13,14 @@ class MyError():
   def newError(self, koption, key, line=None, column=None, **data):
     message = ''
   
-    if(koption):
+    if koption:
       return key
     else:
-      if(line != None and column != None):
+      if line is not None and column is not None:
         message = message + f"Erro[{line}][{column}]: "
-      if(key):
+      if key:
         message = message + self.config.get(self.errorType, key)
-      if(data):
+      if data:
         for key, value in data.items():
           message = message + ", " f"{key}: {value}"
 
